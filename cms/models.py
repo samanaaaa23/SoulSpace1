@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.conf import settings
 from django.db import models
 
 class User(models.Model):
@@ -40,21 +40,23 @@ class Song(models.Model):
 
 class Playlist(models.Model):
     playlist_name = models.CharField(max_length=100)
-    preference = models.ForeignKey(Preference, on_delete=models.CASCADE)
-    song = models.ForeignKey(Song, on_delete=models.CASCADE)
+    preference = models.ForeignKey(Preference, on_delete=models.CASCADE, null=True, blank=True)
+    songs = models.ManyToManyField(Song)
 
     def __str__(self):
         return self.playlist_name
 
 
-class Journal(models.Model):
+
+class Diary(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.title
-
+    class Meta:
+        db_table = 'cms_journalentry'
 
 
 class Page(models.Model):
@@ -80,8 +82,9 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     content = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True)
+    thumbnail = models.ImageField(upload_to='thumbnails/', null=True, blank=True)
+    # Removed author
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=True)

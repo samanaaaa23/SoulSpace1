@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -58,10 +60,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'soulspacebackend1.urls'
 
+# settings.py
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'soulspacebackend1/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,10 +91,8 @@ DATABASES = {
         'PASSWORD':'soulspace',
         'HOST':'localhost',
         'PORT':'5432',
-        
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -131,6 +132,13 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
 }
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), 
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7), 
+    'ROTATE_REFRESH_TOKENS': False, 
+    'BLACKLIST_AFTER_ROTATION': True,  
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -142,3 +150,23 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+
+
+MEDIA_URL = '/media/'  # URL path for accessing media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+KHALTI_SECRET_KEY = "test_secret_key_98eed0ae1a134e1e9a5562375294ee4b"
+
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'beliebersamana12@gmail.com' 
+EMAIL_HOST_PASSWORD = 'xvuherkfddbwtfum'  
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
