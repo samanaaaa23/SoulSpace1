@@ -74,7 +74,7 @@ def initiate_khalti_payment(request):
 
         appointment_id = str(uuid.uuid4())
 
-        # ✅ Create a "Pending" order (now include 'user')
+        #  Create a "Pending" order (now include 'user')
         order_data = {
             "user": user.id,  # 👈 Add this line!
             "course_title": course_title,
